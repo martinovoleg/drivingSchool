@@ -1,0 +1,356 @@
+﻿<Window x:Class="Driving_School.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Driving_School"
+        mc:Ignorable="d"
+        Title="DrivingSchools" Height="514.445" Width="1120.721">
+    <Grid HorizontalAlignment="Left" Margin="14,16,0,11" Width="1087" RenderTransformOrigin="0.5,0.5">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="24*" />
+            <ColumnDefinition Width="27*" />
+            <ColumnDefinition Width="94*" />
+            <ColumnDefinition Width="399*" />
+        </Grid.ColumnDefinitions>
+        <TabControl HorizontalAlignment="Left" Height="460" Margin="0,-10,0,0" VerticalAlignment="Top" Width="1087" RenderTransformOrigin="0.5,0.5" Grid.ColumnSpan="4">
+
+            <TabItem Header="Автошколы">
+                <Grid Name="ListDrivingSchoolsGrid" Background="#FFE5E5E5" Margin="4,4,4,4" Grid.Column="2" RenderTransformOrigin="0.493,0.517">
+                    <Grid.ColumnDefinitions>
+
+                        <ColumnDefinition Width="529*" />
+                        <ColumnDefinition Width="544*" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Height="47" Margin="264,0,0,0" VerticalAlignment="Top" Width="256" RenderTransformOrigin="0.582,0.539">
+                        <Button Content="добавить" Click="AddButton_Click" Padding="3" Margin="10" />
+                        <Button Content="удалить" Click="DelButton_Click" Padding="3" Margin="10" />
+                        <Button Name="sortListDrivingSchools" Content="по убыванию" Padding="3" Margin="10" Click="sortListDrivingSchools_Click" />
+                    </StackPanel>
+
+                    <ListBox Visibility="Hidden" Name="TypeOfPropertyListBox" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" Height="292" Margin="10,52,0,0" VerticalAlignment="Top" Width="509" />
+                    <ListBox Name="DrivingSchoolsListBox" SelectionChanged="DrivingSchoolsListBox_SelectionChanged" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" Height="362" Margin="10,52,0,0" VerticalAlignment="Top" Width="509" />
+                    <Label FontSize="16" Content="Cписок автошкол" HorizontalAlignment="Left" Margin="10,11,0,0" VerticalAlignment="Top" Width="254" />
+                    <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto" Grid.Column="1">
+                        <Grid Name="rightGrid"  Background="#FFE5E5E5" Grid.Row="4" Grid.Column="2" Margin="0">
+                            <Grid.ColumnDefinitions>
+
+                                <ColumnDefinition Width="80*" />
+                                <ColumnDefinition Width="200*" />
+                            </Grid.ColumnDefinitions>
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="70*" />
+                                <RowDefinition Height="100*" />
+                                <RowDefinition Height="100*" />
+                                <RowDefinition Height="100*" />
+                                <RowDefinition Height="100*" />
+                                <RowDefinition Height="100*" />
+                                <RowDefinition Height="100*" />
+                                <RowDefinition Height="100*" />
+                                <RowDefinition Height="100*" />
+                            </Grid.RowDefinitions>
+
+                            <TextBlock FontSize="14" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" Margin="0,0,0,0" TextWrapping="Wrap" Text="Название" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5"></TextBlock>
+                            <TextBlock FontSize="14" Grid.Column="0" Grid.Row="2" HorizontalAlignment="Center" Margin="0,0,0,0" TextWrapping="Wrap" Text="Сайт" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5"></TextBlock>
+                            <TextBlock FontSize="14" Grid.Column="0" Grid.Row="3" HorizontalAlignment="Center" Margin="0,0,0,0" TextWrapping="Wrap" Text="Тип собственности" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5"></TextBlock>
+                            <TextBlock FontSize="14" Grid.Column="0" Grid.Row="4" HorizontalAlignment="Center" Margin="0,0,0,0" TextWrapping="Wrap" Text="Район" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5"></TextBlock>
+                            <TextBlock FontSize="14" Grid.Column="0" Grid.Row="5" HorizontalAlignment="Center" Margin="0,0,0,0" TextWrapping="Wrap" Text="Город" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5"></TextBlock>
+                            <TextBlock FontSize="14" Grid.Column="0" Grid.Row="6" HorizontalAlignment="Center" Margin="0,0,0,0" TextWrapping="Wrap" Text="Улица" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5"></TextBlock>
+                            <TextBlock FontSize="14" Grid.Column="0" Grid.Row="7" HorizontalAlignment="Center" Margin="0,0,0,0" TextWrapping="Wrap" Text="Дом" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5"></TextBlock>
+
+                            <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Left" Height="47" Margin="293,-6,0,0" VerticalAlignment="Top" Width="86" RenderTransformOrigin="0.582,0.539">
+                                <Button Click ="SaveButton_Click" Content="сохранить" Padding="3" Margin="10" />
+                            </StackPanel>
+                            <TextBox Name="DrivingSchoolNameTB" Text="{Binding DrivingSchoolName}"  Width="350" Height="25" Grid.Column="1" Grid.Row="1" />
+                            <TextBox Name="DrivingSchoolSiteTB" Text="{Binding DrivingSchoolSite}"  Width="350" Height="25" Grid.Column="1" Grid.Row="2" />
+                            <ComboBox Name="TypeOfProperty" Grid.Column="1" Grid.Row="3" Width="350" Height="25" />
+                            <TextBox Name="District" Width="350" Height="25" Grid.Column="1" Grid.Row="4" />
+                            <TextBox Name="City" Width="350" Height="25" Grid.Column="1" Grid.Row="5" />
+                            <TextBox Name="Street" Width="350" Height="25" Grid.Column="1" Grid.Row="6" />
+                            <TextBox Name="Home" Width="350" Height="25" Grid.Column="1" Grid.Row="7" />
+                            <Label FontSize="16" Grid.ColumnSpan="2" Content="Информация об автошколе" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" />
+
+                            <Label Name="saveMessage" Content="" Grid.Column="1" HorizontalAlignment="Left" Padding="3" Margin="157,6,0,0" VerticalAlignment="Top" Width="136" Height="25" />
+                            <Button Content="Сформировать отчет" Grid.Column="1" HorizontalAlignment="Left" Margin="123,17,0,0" Grid.Row="8" VerticalAlignment="Top" Width="136" Click="Button_Click" />
+                        </Grid>
+                    </ScrollViewer>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Курсы">
+                <Grid Background="#FFE5E5E5" Margin="4,4,4,4" Grid.Column="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="529*" />
+                        <ColumnDefinition Width="544*" />
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Height="47" Margin="264,0,0,0" VerticalAlignment="Top" Width="256" RenderTransformOrigin="0.582,0.539">
+                        <Button Content="добавить" Click="CourseAddButton_Click" Padding="3" Margin="10" />
+                        <Button Content="удалить" Click="CourseDelButton_Click" Padding="3" Margin="10" />
+                        <Button Name="sortListCourses" Content="по убыванию" Padding="3" Margin="10" Click="sortListCourses_Click" />
+                    </StackPanel>
+                    <ListBox Visibility="Hidden" Name="TypeOfPropertyListBox1" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" Height="292" Margin="10,52,0,0" VerticalAlignment="Top" Width="509" />
+                    <ListBox Name="CoursesListBox" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" Height="362" Margin="10,52,0,0" VerticalAlignment="Top" Width="509" SelectionChanged="CoursesListBox_SelectionChanged" />
+                    <Label FontSize="16" Content="Cписок курсов" HorizontalAlignment="Left" Margin="10,11,0,0" VerticalAlignment="Top" Width="254" />
+                    <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto" Grid.Column="1">
+                        <Grid Background="#FFE5E5E5" Grid.Row="4" Grid.Column="1" Margin="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="80*" />
+                                <ColumnDefinition Width="200*" />
+                            </Grid.ColumnDefinitions>
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="70*" />
+                                <RowDefinition Height="100*" />
+                                <RowDefinition Height="100*" />
+                                <RowDefinition Height="100*" />
+                                <RowDefinition Height="100*" />
+                                <RowDefinition Height="100*" />
+                                <RowDefinition Height="100*" />
+                                <RowDefinition Height="100*" />
+                            </Grid.RowDefinitions>
+
+                            <TextBlock FontSize="14" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" Margin="0,0,0,0" TextWrapping="Wrap" Text="Название" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5"></TextBlock>
+                            <TextBlock FontSize="14" Grid.Column="0" Grid.Row="2" HorizontalAlignment="Center" Margin="0,0,0,0" TextWrapping="Wrap" Text="Длительность" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5"></TextBlock>
+                            <TextBlock FontSize="14" Grid.Column="0" Grid.Row="3" HorizontalAlignment="Center" Margin="0,0,0,0" TextWrapping="Wrap" Text="Дата начала" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5"></TextBlock>
+                            <TextBlock FontSize="14" Grid.Column="0" Grid.Row="4" HorizontalAlignment="Center" Margin="0,0,0,0" TextWrapping="Wrap" Text="Длит. вождения" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5"></TextBlock>
+                            <TextBlock FontSize="14" Grid.Column="0" Grid.Row="5" HorizontalAlignment="Center" Margin="0,0,0,0" TextWrapping="Wrap" Text="Стоим. всего курса" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5"></TextBlock>
+                            <TextBlock FontSize="14" Grid.Column="0" Grid.Row="6" HorizontalAlignment="Center" Margin="0,0,0,0" TextWrapping="Wrap" Text="Стоим. бензина и ГСМ" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5"></TextBlock>
+                            <TextBlock FontSize="14" Grid.Column="0" Grid.Row="7" HorizontalAlignment="Center" Margin="0,0,0,0" TextWrapping="Wrap" Text="Категория вождения" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5"></TextBlock>
+
+                            <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Left" Height="47" Margin="293,-6,0,0" VerticalAlignment="Top" Width="86" RenderTransformOrigin="0.582,0.539">
+                                <Button Content="сохранить" Click="CourseSaveButton_Click" Padding="3" Margin="10" />
+                            </StackPanel>
+                            <TextBox Text="{Binding CourseName}"  Name="CourseName" Height="25" Grid.Column="1" Grid.Row="1" />
+                            <TextBox Name="CourseDuration" Height="25" Grid.Column="1" Grid.Row="2" />
+                            <DatePicker Name="StartDate" Grid.Column="1" Grid.Row="3" Height="25"></DatePicker>
+                            <TextBox Name="DrivingDuration" Height="25" Grid.Column="1" Grid.Row="4" />
+                            <TextBox Name="CourseCost" Height="25" Grid.Column="1" Grid.Row="5" />
+                            <TextBox Name="GSMCost" Height="25" Grid.Column="1" Grid.Row="6" />
+                            <ComboBox Name="CategoryOfDriving" Grid.Column="1" Grid.Row="7" Height="25" />
+                            <Label Name="saveMessage2" Content="" Grid.Column="1" HorizontalAlignment="Left" Padding="3" Margin="157,6,0,0" VerticalAlignment="Top" Width="136" Height="25" />
+                            <Label FontSize="16" Grid.ColumnSpan="2" Content="Информация о курсе" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" />
+                        </Grid>
+                    </ScrollViewer>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Ученики">
+                <Grid Background="#FFE5E5E5" Margin="4,4,4,4" Grid.Column="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="529*" />
+                        <ColumnDefinition Width="544*" />
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Height="47" Margin="264,0,0,0" VerticalAlignment="Top" Width="256" RenderTransformOrigin="0.582,0.539">
+                        <Button Content="добавить" Click="PupilAddButton_Click" Padding="3" Margin="10" />
+                        <Button Content="удалить" Click="PupilDelButton_Click" Padding="3" Margin="10" />
+                        <Button Name="sortListPupils" Content="по убыванию" Padding="3" Margin="10" Click="sortListPupils_Click" />
+                    </StackPanel>
+
+                    <ListBox Name="PupilsListBox" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" Height="362" Margin="10,52,0,0" VerticalAlignment="Top" Width="509" SelectionChanged="PupilListBox_SelectionChanged" />
+                    <Label FontSize="16" Content="Cписок учеников" HorizontalAlignment="Left" Margin="10,11,0,0" VerticalAlignment="Top" Width="254" />
+                    <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto" Grid.Column="1">
+                        <Grid Background="#FFE5E5E5" Grid.Row="4" Grid.Column="1" Margin="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="80*" />
+                                <ColumnDefinition Width="200*" />
+                            </Grid.ColumnDefinitions>
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="70*" />
+                                <RowDefinition Height="100*" />
+                                <RowDefinition Height="100*" />
+                                <RowDefinition Height="100*" />
+                                <RowDefinition Height="100*" />
+                                <RowDefinition Height="100*" />
+                                <RowDefinition Height="100*" />
+                                <RowDefinition Height="100*" />
+                                <RowDefinition Height="100*" />
+                                <RowDefinition Height="100*" />
+                            </Grid.RowDefinitions>
+
+                            <TextBlock FontSize="14" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" Margin="0,0,0,0" TextWrapping="Wrap" Text="Фамилия" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5"></TextBlock>
+                            <TextBlock FontSize="14" Grid.Column="0" Grid.Row="2" HorizontalAlignment="Center" Margin="0,0,0,0" TextWrapping="Wrap" Text="Имя" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5"></TextBlock>
+                            <TextBlock FontSize="14" Grid.Column="0" Grid.Row="3" HorizontalAlignment="Center" Margin="0,0,0,0" TextWrapping="Wrap" Text="Отчество" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5"></TextBlock>
+                            <TextBlock FontSize="14" Grid.Column="0" Grid.Row="4" HorizontalAlignment="Center" Margin="0,0,0,0" TextWrapping="Wrap" Text="Дата рождения" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5"></TextBlock>
+                            <TextBlock FontSize="14" Grid.Column="0" Grid.Row="5" HorizontalAlignment="Center" Margin="0,0,0,0" TextWrapping="Wrap" Text="Путь к фото" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5"></TextBlock>
+                            <TextBlock FontSize="14" Grid.Column="0" Grid.Row="6" HorizontalAlignment="Center" Margin="0,0,0,0" TextWrapping="Wrap" Text="Социальный статус" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5"></TextBlock>
+                            <TextBlock FontSize="14" Grid.Column="0" Grid.Row="7" HorizontalAlignment="Center" Margin="0,0,0,0" TextWrapping="Wrap" Text="Место учебы" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5"></TextBlock>
+                            <TextBlock FontSize="14" Grid.Column="0" Grid.Row="8" HorizontalAlignment="Center" Margin="0,0,0,0" TextWrapping="Wrap" Text="Место работы" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5"></TextBlock>
+                            <TextBlock FontSize="14" Grid.Column="0" Grid.Row="9" HorizontalAlignment="Center" Margin="0,0,0,0" TextWrapping="Wrap" Text="Безналичный расчет" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5"></TextBlock>
+
+                            <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Left" Height="47" Margin="293,-6,0,0" VerticalAlignment="Top" Width="86" RenderTransformOrigin="0.582,0.539">
+                                <Button Content="сохранить" Click="PupilSaveButton_Click" Padding="3" Margin="10" />
+                            </StackPanel>
+                            <TextBox Text="{Binding SecondName}"  Name="PupilSecondName" Height="25" Grid.Column="1" Grid.Row="1" />
+                            <TextBox Text="{Binding FirstName}" Name="PupilFirstName" Height="25" Grid.Column="1" Grid.Row="2" />
+                            <TextBox Text="{Binding SurName}" Name="PupilSurName" Height="25" Grid.Column="1" Grid.Row="3" />
+                            <DatePicker Name="PupilBirthDate" Height="25" Grid.Column="1" Grid.Row="4" />
+                            <TextBox Name="PupilPhotoPath" Height="25" Grid.Column="1" Grid.Row="5" />
+                            <TextBox Name="PupilStatus" Height="25" Grid.Column="1" Grid.Row="6" />
+                            <TextBox Name="PupilStudyPlace" Height="25" Grid.Column="1" Grid.Row="7" />
+                            <TextBox Name="PupilWorkPlace" Height="25" Grid.Column="1" Grid.Row="8" />
+                            <CheckBox Name="PupilPayment" Grid.Column="1" Grid.Row="9" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            <Label Name="saveMessage3" Content="" Grid.Column="1" HorizontalAlignment="Left" Padding="3" Margin="157,6,0,0" VerticalAlignment="Top" Width="136" Height="25" />
+                            <Label FontSize="16" Grid.ColumnSpan="2" Content="Информация об ученике" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" />
+                        </Grid>
+                    </ScrollViewer>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Сотрудники">
+                <Grid Background="#FFE5E5E5" Margin="4,4,4,4" Grid.Column="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="529*" />
+                        <ColumnDefinition Width="544*" />
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Height="47" Margin="264,0,0,0" VerticalAlignment="Top" Width="256" RenderTransformOrigin="0.582,0.539">
+                        <Button Content="добавить" Click="WorkerAddButton_Click" Padding="3" Margin="10" />
+                        <Button Content="удалить" Click="WorkerDelButton_Click" Padding="3" Margin="10" />
+                        <Button Name="sortWorkerList" Content="по убыванию" Padding="3" Margin="10" />
+                    </StackPanel>
+
+                    <ListBox Name="WorkersListBox" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" Height="362" Margin="10,52,0,0" VerticalAlignment="Top" Width="509" SelectionChanged="WorkersListBox_SelectionChanged" />
+                    <Label FontSize="16" Content="Cписок сотрудников" HorizontalAlignment="Left" Margin="10,11,0,0" VerticalAlignment="Top" Width="254" />
+                    <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto" Grid.Column="1">
+                        <Grid Background="#FFE5E5E5" Grid.Row="4" Grid.Column="1" Margin="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="80*" />
+                                <ColumnDefinition Width="200*" />
+                            </Grid.ColumnDefinitions>
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="70*" />
+                                <RowDefinition Height="100*" />
+                                <RowDefinition Height="100*" />
+                                <RowDefinition Height="100*" />
+                                <RowDefinition Height="100*" />
+                                <RowDefinition Height="100*" />
+
+                                <RowDefinition Height="100*" />
+                            </Grid.RowDefinitions>
+
+                            <TextBlock FontSize="14" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" Margin="0,0,0,0" TextWrapping="Wrap" Text="Фамилия" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5"></TextBlock>
+                            <TextBlock FontSize="14" Grid.Column="0" Grid.Row="2" HorizontalAlignment="Center" Margin="0,0,0,0" TextWrapping="Wrap" Text="Имя" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5"></TextBlock>
+                            <TextBlock FontSize="14" Grid.Column="0" Grid.Row="3" HorizontalAlignment="Center" Margin="0,0,0,0" TextWrapping="Wrap" Text="Отчество" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5"></TextBlock>
+                            <TextBlock FontSize="14" Grid.Column="0" Grid.Row="4" HorizontalAlignment="Center" Margin="0,0,0,0" TextWrapping="Wrap" Text="Дата рождения" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5"></TextBlock>
+                            <TextBlock FontSize="14" Grid.Column="0" Grid.Row="5" HorizontalAlignment="Center" Margin="0,0,0,0" TextWrapping="Wrap" Text="Путь к фото" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5"></TextBlock>
+                            <TextBlock FontSize="14" Grid.Column="0" Grid.Row="6" HorizontalAlignment="Center" Margin="0,0,0,0" TextWrapping="Wrap" Text="Социальный статус" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5"></TextBlock>
+
+                            <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Left" Height="47" Margin="293,-6,0,0" VerticalAlignment="Top" Width="86" RenderTransformOrigin="0.582,0.539">
+                                <Button Content="сохранить" Click="WorkerSaveButton_Click" Padding="3" Margin="10" />
+                            </StackPanel>
+                            <TextBox Text="{Binding SecondName}"  Name="WorkerSecondName" Height="25" Grid.Column="1" Grid.Row="1" />
+                            <TextBox Text="{Binding FirstName}" Name="WorkerFirstName" Height="25" Grid.Column="1" Grid.Row="2" />
+                            <TextBox Text="{Binding SurName}" Name="WorkerSurName" Height="25" Grid.Column="1" Grid.Row="3" />
+                            <DatePicker Name="WorkerBirthDate" Height="25" Grid.Column="1" Grid.Row="4" />
+                            <TextBox Name="WorkerPhotoPath" Height="25" Grid.Column="1" Grid.Row="5" />
+                            <TextBox Name="WorkerStatus" Height="25" Grid.Column="1" Grid.Row="6" />
+                            <Label Name="saveMessage4" Content="" Grid.Column="1" HorizontalAlignment="Left" Padding="3" Margin="157,6,0,0" VerticalAlignment="Top" Width="136" Height="25" />
+                            <Label FontSize="16" Grid.ColumnSpan="2" Content="Информация о сотруднике" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" />
+                        </Grid>
+                    </ScrollViewer>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Автомобили">
+                <Grid Background="#FFE5E5E5" Margin="4,4,4,4" Grid.Column="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="529*" />
+                        <ColumnDefinition Width="544*" />
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Height="47" Margin="264,0,0,0" VerticalAlignment="Top" Width="256" RenderTransformOrigin="0.582,0.539">
+                        <Button Content="добавить" Click="CarAddButton_Click" Padding="3" Margin="10" />
+                        <Button Content="удалить" Click="CarDelButton_Click" Padding="3" Margin="10" />
+                        <Button Name="sortCarList" Content="по убыванию" Padding="3" Margin="10" />
+                    </StackPanel>
+
+                    <ListBox Name="CarsListBox" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" Height="362" Margin="10,52,0,0" VerticalAlignment="Top" Width="509" SelectionChanged="CarsListBox_SelectionChanged" />
+                    <Label FontSize="16" Content="Cписок машин" HorizontalAlignment="Left" Margin="10,11,0,0" VerticalAlignment="Top" Width="254" />
+                    <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto" Grid.Column="1">
+                        <Grid Background="#FFE5E5E5" Grid.Row="4" Grid.Column="1" Margin="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="80*" />
+                                <ColumnDefinition Width="200*" />
+                            </Grid.ColumnDefinitions>
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="70*" />
+                                <RowDefinition Height="100*" />
+                                <RowDefinition Height="100*" />
+                                <RowDefinition Height="100*" />
+                                <RowDefinition Height="100*" />
+                            </Grid.RowDefinitions>
+
+                            <TextBlock FontSize="14" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" Margin="0,0,0,0" TextWrapping="Wrap" Text="Тип" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5"></TextBlock>
+                            <TextBlock FontSize="14" Grid.Column="0" Grid.Row="2" HorizontalAlignment="Center" Margin="0,0,0,0" TextWrapping="Wrap" Text="Марка" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5"></TextBlock>
+                            <TextBlock FontSize="14" Grid.Column="0" Grid.Row="3" HorizontalAlignment="Center" Margin="0,0,0,0" TextWrapping="Wrap" Text="Год производства" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5"></TextBlock>
+                            <TextBlock FontSize="14" Grid.Column="0" Grid.Row="4" HorizontalAlignment="Center" Margin="0,0,0,0" TextWrapping="Wrap" Text="С какого года в школе" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5"></TextBlock>
+
+                            <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Left" Height="47" Margin="293,-6,0,0" VerticalAlignment="Top" Width="86" RenderTransformOrigin="0.582,0.539">
+                                <Button Content="сохранить" Click="CarSaveButton_Click" Padding="3" Margin="10" />
+                            </StackPanel>
+                            <TextBox Text="{Binding CarType}"  Name="CarType" Height="25" Grid.Column="1" Grid.Row="1" />
+                            <TextBox Text="{Binding CarModel}" Name="CarModel" Height="25" Grid.Column="1" Grid.Row="2" />
+
+                            <DatePicker Name="CarProductionYear" Height="25" Grid.Column="1" Grid.Row="3" />
+                            <DatePicker Name="CarAdmissionYear" Height="25" Grid.Column="1" Grid.Row="4" />
+
+                            <Label Name="saveMessage5" Content="" Grid.Column="1" HorizontalAlignment="Left" Padding="3" Margin="157,6,0,0" VerticalAlignment="Top" Width="136" Height="25" />
+                            <Label FontSize="16" Grid.ColumnSpan="2" Content="Информация о машине" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" />
+                        </Grid>
+                    </ScrollViewer>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Занятия">
+                <Grid Background="#FFE5E5E5" Margin="4,4,4,4" Grid.Column="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="529*" />
+                        <ColumnDefinition Width="544*" />
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Height="47" Margin="264,0,0,0" VerticalAlignment="Top" Width="256" RenderTransformOrigin="0.582,0.539">
+                        <Button Content="добавить" Click="LessonAddButton_Click" Padding="3" Margin="10" />
+                        <Button Content="удалить" Click="LessonDelButton_Click" Padding="3" Margin="10" />
+                        <Button Name="sortLessonList" Content="по убыванию" Padding="3" Margin="10" />
+                    </StackPanel>
+
+                    <ListBox Name="LessonsListBox" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" Height="362" Margin="10,52,0,0" VerticalAlignment="Top" Width="509" SelectionChanged="LessonsListBox_SelectionChanged" />
+                    <Label FontSize="16" Content="Cписок занятий" HorizontalAlignment="Left" Margin="10,11,0,0" VerticalAlignment="Top" Width="254" />
+                    <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto" Grid.Column="1">
+                        <Grid Background="#FFE5E5E5" Grid.Row="4" Grid.Column="1" Margin="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="80*" />
+                                <ColumnDefinition Width="200*" />
+                            </Grid.ColumnDefinitions>
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="70*" />
+                                <RowDefinition Height="100*" />
+                                <RowDefinition Height="100*" />
+                                <RowDefinition Height="100*" />
+                            </Grid.RowDefinitions>
+
+                            <TextBlock FontSize="14" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" Margin="0,0,0,0" TextWrapping="Wrap" Text="Проводивший сотрудник" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5"></TextBlock>
+                            <TextBlock FontSize="14" Grid.Column="0" Grid.Row="2" HorizontalAlignment="Center" Margin="0,0,0,0" TextWrapping="Wrap" Text="Машина" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5"></TextBlock>
+                            <TextBlock FontSize="14" Grid.Column="0" Grid.Row="3" HorizontalAlignment="Center" Margin="0,0,0,0" TextWrapping="Wrap" Text="Дата занятия" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5"></TextBlock>
+
+                            <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Left" Height="47" Margin="293,-6,0,0" VerticalAlignment="Top" Width="86" RenderTransformOrigin="0.582,0.539">
+                                <Button Content="сохранить" Click="LessonSaveButton_Click" Padding="3" Margin="10" />
+                            </StackPanel>
+                            <TextBox  Name="LessonWorkerId" Height="25" Grid.Column="1" Grid.Row="1" />
+                            <TextBox  Name="LessonCarId" Height="25" Grid.Column="1" Grid.Row="2" />
+
+                            <DatePicker Name="LessonDate" Height="25" Grid.Column="1" Grid.Row="3" />
+
+                            <Label Name="saveMessage6" Content="" Grid.Column="1" HorizontalAlignment="Left" Padding="3" Margin="157,6,0,0" VerticalAlignment="Top" Width="136" Height="25" />
+                            <Label FontSize="16" Grid.ColumnSpan="2" Content="Информация о занятии" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" />
+                        </Grid>
+                    </ScrollViewer>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>
