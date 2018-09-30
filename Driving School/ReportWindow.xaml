@@ -23,6 +23,7 @@
             <RowDefinition Height="0.15*"/>
             <RowDefinition Height="0.15*"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="0.15*"/>
             <RowDefinition Height="0.05*"/>
         </Grid.RowDefinitions>
         <Label Content="Отчёт" Grid.ColumnSpan="2" FontWeight="Bold" FontSize="20" Grid.Column="1" Grid.Row="1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
@@ -54,7 +55,7 @@
                 </DataTemplate>
             </DataGrid.ItemTemplate>
         </DataGrid>
-
+        <Button Grid.Row="9" Grid.Column="1" Grid.ColumnSpan="2" Margin="250,5" Content="Открыть диаграммы" Click="Button_Click"></Button>
 
     </Grid>
 </Window>

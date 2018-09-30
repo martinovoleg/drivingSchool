@@ -44,12 +44,9 @@ namespace Driving_School
                         this.Close();
                         return;
                     }
-                    else
-                    {
-                        MessageBox.Show("Неправильный логин или пароль.");
-                        return;
-                    }
                 }
+                MessageBox.Show("Неправильный логин или пароль.");
+                return;
             }
             else
             {
@@ -68,12 +65,13 @@ namespace Driving_School
                     return;
                 }
             }
+
             if (Password1.Password.ToString() == Password2.Password.ToString())
             {
                 var newUser = new Users
                 {
                     UserLogin = Login.Text.ToString(),
-                    UserPass = Password.Password.ToString(),
+                    UserPass = Password1.Password.ToString(),
                 };
                 try
                 {

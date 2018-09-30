@@ -59,7 +59,14 @@ namespace Driving_School
                 }
 
                 MostPopularAge.Content = Convert.ToInt32(ages.Average());
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
 
+            try
+            {
                 var workers = db.DrivingLessons.GroupBy(p => p.CoWorkerId)
                     .Select(g => new { Id = g.Key, Count = g.Count() });
 
@@ -71,6 +78,12 @@ namespace Driving_School
             {
                 MessageBox.Show(ex.ToString());
             }
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            DiagramWindow dw = new DiagramWindow();
+            dw.ShowDialog();
         }
     }
 

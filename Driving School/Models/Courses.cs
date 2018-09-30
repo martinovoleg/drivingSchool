@@ -12,11 +12,14 @@ namespace Driving_School.Models
     {
         [Key]
         public int CourseId { get; set; }
+
         public int DrivingSchoolId { get; set; }
         public string CourseName { get; set; }
+
         [Column(TypeName = "Date")]
         public DateTime DateOfBeginningCourse { get; set; }
-        public double CourseDuration { get; set; }
+
+        public double? CourseDuration { get; set; }
         public double TrainingPeriod { get; set; }
         public double CostOfEducation { get; set; }
         public double CostOfGasolineAndFuel { get; set; }

@@ -8,12 +8,13 @@
         Title="DrivingSchools" Height="514.445" Width="1120.721">
     <Grid HorizontalAlignment="Left" Margin="14,16,0,11" Width="1087" RenderTransformOrigin="0.5,0.5">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="24*" />
-            <ColumnDefinition Width="27*" />
-            <ColumnDefinition Width="94*" />
-            <ColumnDefinition Width="399*" />
+            <ColumnDefinition Width="48*" />
+            <ColumnDefinition Width="54*" />
+            <ColumnDefinition Width="48*" />
+            <ColumnDefinition Width="140*" />
+            <ColumnDefinition Width="797*" />
         </Grid.ColumnDefinitions>
-        <TabControl HorizontalAlignment="Left" Height="460" Margin="0,-10,0,0" VerticalAlignment="Top" Width="1087" RenderTransformOrigin="0.5,0.5" Grid.ColumnSpan="4">
+        <TabControl HorizontalAlignment="Left" Height="460" Margin="0,-10,0,0" VerticalAlignment="Top" Width="1087" RenderTransformOrigin="0.5,0.5" Grid.ColumnSpan="5">
 
             <TabItem Header="Автошколы">
                 <Grid Name="ListDrivingSchoolsGrid" Background="#FFE5E5E5" Margin="4,4,4,4" Grid.Column="2" RenderTransformOrigin="0.493,0.517">
@@ -72,7 +73,8 @@
                             <Label FontSize="16" Grid.ColumnSpan="2" Content="Информация об автошколе" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" />
 
                             <Label Name="saveMessage" Content="" Grid.Column="1" HorizontalAlignment="Left" Padding="3" Margin="157,6,0,0" VerticalAlignment="Top" Width="136" Height="25" />
-                            <Button Content="Сформировать отчет" Grid.Column="1" HorizontalAlignment="Left" Margin="123,17,0,0" Grid.Row="8" VerticalAlignment="Top" Width="136" Click="Button_Click" />
+                            <Button Content="Сформировать отчет" Grid.Column="1" HorizontalAlignment="Left" Margin="233,17,0,0" Grid.Row="8" VerticalAlignment="Top" Width="136" Click="Button_Click" />
+                            <Button Content="Запросы" Click="Button_Click_1" Grid.Column="1" HorizontalAlignment="Left" Margin="30,17,0,0" Grid.Row="8" VerticalAlignment="Top" Width="75" />
                         </Grid>
                     </ScrollViewer>
                 </Grid>
@@ -80,19 +82,21 @@
             <TabItem Header="Курсы">
                 <Grid Background="#FFE5E5E5" Margin="4,4,4,4" Grid.Column="2">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="529*" />
+                        <ColumnDefinition Width="15*" />
+                        <ColumnDefinition Width="21*"/>
+                        <ColumnDefinition Width="493*"/>
                         <ColumnDefinition Width="544*" />
                     </Grid.ColumnDefinitions>
 
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Height="47" Margin="264,0,0,0" VerticalAlignment="Top" Width="256" RenderTransformOrigin="0.582,0.539">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Height="47" Margin="228.17,0,0,0" VerticalAlignment="Top" Width="256" RenderTransformOrigin="0.582,0.539" Grid.Column="2">
                         <Button Content="добавить" Click="CourseAddButton_Click" Padding="3" Margin="10" />
                         <Button Content="удалить" Click="CourseDelButton_Click" Padding="3" Margin="10" />
                         <Button Name="sortListCourses" Content="по убыванию" Padding="3" Margin="10" Click="sortListCourses_Click" />
                     </StackPanel>
-                    <ListBox Visibility="Hidden" Name="TypeOfPropertyListBox1" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" Height="292" Margin="10,52,0,0" VerticalAlignment="Top" Width="509" />
-                    <ListBox Name="CoursesListBox" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" Height="362" Margin="10,52,0,0" VerticalAlignment="Top" Width="509" SelectionChanged="CoursesListBox_SelectionChanged" />
-                    <Label FontSize="16" Content="Cписок курсов" HorizontalAlignment="Left" Margin="10,11,0,0" VerticalAlignment="Top" Width="254" />
-                    <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto" Grid.Column="1">
+                    <ListBox Visibility="Hidden" Name="TypeOfPropertyListBox1" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" Height="292" Margin="10,52,0,0" VerticalAlignment="Top" Width="509" Grid.ColumnSpan="3" />
+                    <ListBox Name="CoursesListBox" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" Height="362" Margin="10,52,0,0" VerticalAlignment="Top" Width="509" SelectionChanged="CoursesListBox_SelectionChanged" Grid.ColumnSpan="3" />
+                    <Label FontSize="16" Content="Cписок курсов" HorizontalAlignment="Left" Margin="10,11,0,0" VerticalAlignment="Top" Width="254" Grid.ColumnSpan="3" />
+                    <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto" Grid.Column="3">
                         <Grid Background="#FFE5E5E5" Grid.Row="4" Grid.Column="1" Margin="0">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="80*" />
@@ -123,7 +127,9 @@
                             </StackPanel>
                             <TextBox Text="{Binding CourseName}"  Name="CourseName" Height="25" Grid.Column="1" Grid.Row="1" />
                             <TextBox Name="CourseDuration" Height="25" Grid.Column="1" Grid.Row="2" />
-                            <DatePicker Name="StartDate" Grid.Column="1" Grid.Row="3" Height="25"></DatePicker>
+                            <DatePicker Name="StartDate" Grid.Column="1" Grid.Row="3" Height="25">
+                              
+                            </DatePicker>
                             <TextBox Name="DrivingDuration" Height="25" Grid.Column="1" Grid.Row="4" />
                             <TextBox Name="CourseCost" Height="25" Grid.Column="1" Grid.Row="5" />
                             <TextBox Name="GSMCost" Height="25" Grid.Column="1" Grid.Row="6" />
@@ -207,7 +213,7 @@
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Height="47" Margin="264,0,0,0" VerticalAlignment="Top" Width="256" RenderTransformOrigin="0.582,0.539">
                         <Button Content="добавить" Click="WorkerAddButton_Click" Padding="3" Margin="10" />
                         <Button Content="удалить" Click="WorkerDelButton_Click" Padding="3" Margin="10" />
-                        <Button Name="sortWorkerList" Content="по убыванию" Padding="3" Margin="10" />
+                        <Button Name="sortWorkerList" Content="по убыванию" Padding="3" Margin="10" Click="sortWorkerList_Click" />
                     </StackPanel>
 
                     <ListBox Name="WorkersListBox" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" Height="362" Margin="10,52,0,0" VerticalAlignment="Top" Width="509" SelectionChanged="WorkersListBox_SelectionChanged" />
@@ -256,19 +262,21 @@
             <TabItem Header="Автомобили">
                 <Grid Background="#FFE5E5E5" Margin="4,4,4,4" Grid.Column="2">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="529*" />
+                        <ColumnDefinition Width="359*" />
+                        <ColumnDefinition Width="117*"/>
+                        <ColumnDefinition Width="53*"/>
                         <ColumnDefinition Width="544*" />
                     </Grid.ColumnDefinitions>
 
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Height="47" Margin="264,0,0,0" VerticalAlignment="Top" Width="256" RenderTransformOrigin="0.582,0.539">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Height="47" Margin="264,0,0,0" VerticalAlignment="Top" Width="256" RenderTransformOrigin="0.582,0.539" Grid.ColumnSpan="3">
                         <Button Content="добавить" Click="CarAddButton_Click" Padding="3" Margin="10" />
                         <Button Content="удалить" Click="CarDelButton_Click" Padding="3" Margin="10" />
-                        <Button Name="sortCarList" Content="по убыванию" Padding="3" Margin="10" />
+                        <Button Name="sortCarList" Content="по убыванию" Padding="3" Margin="10" Click="sortCarList_Click" />
                     </StackPanel>
 
-                    <ListBox Name="CarsListBox" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" Height="362" Margin="10,52,0,0" VerticalAlignment="Top" Width="509" SelectionChanged="CarsListBox_SelectionChanged" />
+                    <ListBox Name="CarsListBox" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" Height="362" Margin="10,52,0,0" VerticalAlignment="Top" Width="509" SelectionChanged="CarsListBox_SelectionChanged" Grid.ColumnSpan="3" />
                     <Label FontSize="16" Content="Cписок машин" HorizontalAlignment="Left" Margin="10,11,0,0" VerticalAlignment="Top" Width="254" />
-                    <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto" Grid.Column="1">
+                    <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto" Grid.Column="3">
                         <Grid Background="#FFE5E5E5" Grid.Row="4" Grid.Column="1" Margin="0">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="80*" />
@@ -314,7 +322,7 @@
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Height="47" Margin="264,0,0,0" VerticalAlignment="Top" Width="256" RenderTransformOrigin="0.582,0.539">
                         <Button Content="добавить" Click="LessonAddButton_Click" Padding="3" Margin="10" />
                         <Button Content="удалить" Click="LessonDelButton_Click" Padding="3" Margin="10" />
-                        <Button Name="sortLessonList" Content="по убыванию" Padding="3" Margin="10" />
+                        <Button Name="sortLessonList" Content="по убыванию" Padding="3" Margin="10" Click="sortLessonList_Click" />
                     </StackPanel>
 
                     <ListBox Name="LessonsListBox" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" Height="362" Margin="10,52,0,0" VerticalAlignment="Top" Width="509" SelectionChanged="LessonsListBox_SelectionChanged" />

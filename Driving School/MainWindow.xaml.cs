@@ -15,6 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Configuration;
 using System.Collections.ObjectModel;
+using System.Text.RegularExpressions;
 
 namespace Driving_School
 {
@@ -24,10 +25,56 @@ namespace Driving_School
     public partial class MainWindow : Window
     {
         private DbContext_Prog db = new DbContext_Prog(ConfigurationManager.ConnectionStrings["PCString"].ConnectionString);
+        private int DrivingSchoolId = 0;
+
+        private void SetDisplayDates()
+        {
+            StartDate.DisplayDate = DateTime.Now.Date;
+            StartDate.DisplayDateStart = new DateTime(1990, 1, 1);
+
+            CarProductionYear.DisplayDate = DateTime.Now.Date;
+            CarProductionYear.DisplayDateStart = new DateTime(1990, 1, 1);
+            CarProductionYear.DisplayDateEnd = DateTime.Now.Date;
+
+            LessonDate.DisplayDate = DateTime.Now.Date;
+            LessonDate.DisplayDateStart = new DateTime(1990, 1, 1);
+
+            CarAdmissionYear.DisplayDate = DateTime.Now.Date;
+            CarAdmissionYear.DisplayDateStart = new DateTime(1990, 1, 1);
+            CarAdmissionYear.DisplayDateEnd = DateTime.Now.Date;
+
+            PupilBirthDate.DisplayDate = new DateTime(DateTime.Now.Year - 16, 1, 1); 
+            PupilBirthDate.DisplayDateEnd = new DateTime(DateTime.Now.Year - 16, 12, 31);
+
+            WorkerBirthDate.DisplayDate = new DateTime(DateTime.Now.Year - 16, 1, 1);
+            WorkerBirthDate.DisplayDateEnd = new DateTime(DateTime.Now.Year - 16, 12, 31);
+        }
+
+        private void SetBlackOutDates()
+        {
+            StartDate.BlackoutDates.Add(new CalendarDateRange(new DateTime(0001, 1, 1), new DateTime(1989, 12, 31)));
+
+            LessonDate.BlackoutDates.Add(new CalendarDateRange(new DateTime(0001, 1, 1), new DateTime(1989, 12, 31)));
+
+            CarProductionYear.BlackoutDates.Add(new CalendarDateRange(new DateTime(0001, 1, 1), new DateTime(1989, 12, 31)));
+            CarAdmissionYear.BlackoutDates.Add(new CalendarDateRange(new DateTime(0001, 1, 1), new DateTime(1989, 12, 31)));
+
+            CarProductionYear.BlackoutDates.Add(new CalendarDateRange(DateTime.Now.Date, DateTime.MaxValue));
+            CarAdmissionYear.BlackoutDates.Add(new CalendarDateRange(DateTime.Now.Date, DateTime.MaxValue));
+
+            PupilBirthDate.BlackoutDates.Add(new CalendarDateRange(new DateTime(0001, 1, 1), new DateTime(DateTime.Now.Year - 120, 12, 31)));
+            PupilBirthDate.BlackoutDates.Add(new CalendarDateRange(new DateTime(DateTime.Now.Year - 16, 12, 31), DateTime.Now.Date));
+
+            WorkerBirthDate.BlackoutDates.Add(new CalendarDateRange(new DateTime(0001, 1, 1), new DateTime(DateTime.Now.Year - 120, 12, 31)));
+            WorkerBirthDate.BlackoutDates.Add(new CalendarDateRange(new DateTime(DateTime.Now.Year - 16, 12, 31), DateTime.Now.Date));
+        }
 
         public MainWindow()
         {
             InitializeComponent();
+            SetDisplayDates();
+            SetBlackOutDates();
+
             // получаем все автошколы
 
             var drivingShoolsList = db.DrivingSchools.ToList();
@@ -52,6 +99,7 @@ namespace Driving_School
             var typeOfPropertyList = db.TypeOfProperty.ToList();
             Addresses DrivingSchoolAdress = null;
             var selectedDrivingSchool = (DrivingSchools)DrivingSchoolsListBox.SelectedItem;
+
             if (selectedDrivingSchool != null)
             {
                 DrivingSchoolAdress = db.Addresses.FirstOrDefault(el =>
@@ -59,6 +107,7 @@ namespace Driving_School
             }
 
             ListDrivingSchoolsGrid.DataContext = DrivingSchoolsListBox.SelectedItem;
+
             if (selectedDrivingSchool != null)
             {
                 TypeOfProperty.Text = typeOfPropertyList.FirstOrDefault(el =>
@@ -74,22 +123,38 @@ namespace Driving_School
             // получаем все курсы
             if (selectedDrivingSchool != null)
             {
+                DrivingSchoolId = selectedDrivingSchool.DrivingSchoolId;
                 var courseList = db.Courses.Where(el => el.DrivingSchoolId == selectedDrivingSchool.DrivingSchoolId).ToList();
-                var pupilsList = db.Pupils.Where(el => el.SchoolId == selectedDrivingSchool.DrivingSchoolId).ToList();
-                var workersList = db.CoWorkers.Where(el => el.SchoolId == selectedDrivingSchool.DrivingSchoolId).ToList();
+                var pupilsList = db.Pupils.Where(el => el.SchoolId == selectedDrivingSchool.DrivingSchoolId).Select(el => new
+                {
+                    el.PupilId,
+                    el.IsCashlessPayments, 
+                    el.SchoolId, 
+                    el.PersonId,
+                    FullName = el.person.SecondName + " " + el.person.FirstName + " " + el.person.Surname
+
+                }).ToList();
+                var workersList = db.CoWorkers.Where(el => el.SchoolId == selectedDrivingSchool.DrivingSchoolId).Select(el => new
+                {
+                    el.CoWorkerId,
+                    el.SchoolId,
+                    el.PersonId,
+                    FullName = el.person.SecondName + " " + el.person.FirstName + " " + el.person.Surname
+
+                }).ToList();
                 var carsList = db.Cars.Where(el => el.SchoolId == selectedDrivingSchool.DrivingSchoolId).ToList();
                 var lessonsList = db.DrivingLessons.Where(el => el.SchoolId == selectedDrivingSchool.DrivingSchoolId).ToList();
 
                 CoursesListBox.ItemsSource = courseList;
                 CoursesListBox.DisplayMemberPath = "CourseName";
                 PupilsListBox.ItemsSource = pupilsList;
-                PupilsListBox.DisplayMemberPath = "PupilId";
+                PupilsListBox.DisplayMemberPath = "FullName";
                 WorkersListBox.ItemsSource = workersList;
-                WorkersListBox.DisplayMemberPath = "CoWorkerId";
+                WorkersListBox.DisplayMemberPath = "FullName";
                 CarsListBox.ItemsSource = carsList;
-                CarsListBox.DisplayMemberPath = "CarId";
+                CarsListBox.DisplayMemberPath = "CarModel";
                 LessonsListBox.ItemsSource = lessonsList;
-                LessonsListBox.DisplayMemberPath = "DrivingLessonsId";
+                LessonsListBox.DisplayMemberPath = "SessionDate";
             }
         }
 
@@ -204,6 +269,15 @@ namespace Driving_School
 
                     if (selectedCategoryOfDriving != null)
                     {
+                        foreach (var course_category in db.Course_CategotryOfDriving.ToList())
+                        {
+                            if (course_category.CourseId == selCourse.CourseId)
+                            {
+                                db.Course_CategotryOfDriving.Remove(course_category);
+                                db.SaveChanges();
+                            }
+                        }
+
                         var newCourse_Category = new Course_CategotryOfDriving
                         {
                             CategoryOfDrivingId = selectedCategoryOfDriving.CategoryOfDrivingId,
@@ -243,6 +317,7 @@ namespace Driving_School
 
                     var courseList = db.Courses.Where(el => el.DrivingSchoolId == selectedDrivingSchool.DrivingSchoolId).ToList();
                     CoursesListBox.ItemsSource = courseList;
+                    CoursesListBox.SelectedItem = CoursesListBox.Items[CoursesListBox.Items.Count - 1];
                 }
                 else
                 {
@@ -293,30 +368,31 @@ namespace Driving_School
 
                 try
                 {
-                    var selectedCourseCategory = db.Course_CategotryOfDriving.Where(el => el.CourseId == selectedCourse.CourseId).Last();
+                    var selectedCourseCategory = db.Course_CategotryOfDriving.Where(el => el.CourseId == selectedCourse.CourseId).First();
                     var category = categoryOfDrivingList.FirstOrDefault(el => el.CategoryOfDrivingId == selectedCourseCategory.CategoryOfDrivingId);
 
                     if (category != null)
                     {
-                        CategoryOfDriving.SelectedItem = selectedCourseCategory.categoryOfDriving;
+                        CategoryOfDriving.SelectedItem = category;
                     }
                 }
-                catch
+                catch (Exception ex)
                 {
-                    //skip
+                    MessageBox.Show(ex.ToString());
                 }
 
-                //    CategoryOfDriving.SelectedItem =
-
-                //        ;
-                //        typeOfPropertyList.FirstOrDefault(el =>
-                //el.TypeOfPropertyId == selectedDrivingSchool.TypeOfPropertyId)?.TypeOfPropertyName;
             }
         }
 
         private void PupilSaveButton_Click(object sender, RoutedEventArgs e)
         {
-            var selectedPupil = (Pupils)PupilsListBox.SelectedItem;
+            Pupils selectedPupil = null;
+
+            if (PupilsListBox.SelectedItem != null)
+            {
+                int plpId = (int)PupilsListBox.SelectedItem.GetType().GetProperty("PupilId").GetValue(PupilsListBox.SelectedItem, null);
+                selectedPupil = db.Pupils.First(el => el.PupilId == plpId);
+            }
 
             try
             {
@@ -354,7 +430,6 @@ namespace Driving_School
                         var selPupil = db.Pupils.Where(el => el.PupilId == selectedPupil.PupilId).FirstOrDefault();
 
                         selPupil.SchoolId = ((DrivingSchools)DrivingSchoolsListBox.SelectedItem).DrivingSchoolId;
-                        selPupil.PersonId = db.Person.Max(el => el.PersonId);
                         selPupil.IsCashlessPayments = (bool)PupilPayment.IsChecked;
 
                         var selPerson = db.Person.Where(el => el.PersonId == selPupil.PersonId).FirstOrDefault();
@@ -373,7 +448,17 @@ namespace Driving_School
                 }
 
                 saveMessage3.Content = "Сохранено!";
-                var pupilsList = db.Pupils.Where(el => el.SchoolId == ((DrivingSchools)DrivingSchoolsListBox.SelectedItem).DrivingSchoolId).ToList();
+
+                var pupilsList = db.Pupils.Where(el => el.SchoolId == DrivingSchoolId).Select(el => new
+                {
+                    el.PupilId,
+                    el.IsCashlessPayments,
+                    el.SchoolId,
+                    el.PersonId,
+                    FullName = el.person.SecondName + " " + el.person.FirstName + " " + el.person.Surname
+
+                }).ToList();
+
                 PupilsListBox.ItemsSource = pupilsList;
             }
             catch (Exception ex)
@@ -388,6 +473,7 @@ namespace Driving_School
             {
                 var selectedDrivingSchool = (DrivingSchools)DrivingSchoolsListBox.SelectedItem;
                 var pupilList = db.Pupils.Where(el => el.SchoolId == selectedDrivingSchool.DrivingSchoolId).ToList();
+
                 if (DrivingSchoolsListBox.SelectedItem != null)
                 {
                     var newPupil = new Pupils();
@@ -397,10 +483,23 @@ namespace Driving_School
                     PupilBirthDate.SelectedDate = null;
                     PupilStatus.Text = "";
                     PupilPhotoPath.Text = "";
+                    PupilPayment.IsChecked = false;
+                    PupilWorkPlace.Text = "";
+                    PupilStudyPlace.Text = "";
 
                     pupilList.Add(newPupil);
 
-                    PupilsListBox.ItemsSource = pupilList;
+                    var pupilsListNew = pupilList.Select(el => new
+                    {
+                        el.PupilId,
+                        el.IsCashlessPayments,
+                        el.SchoolId,
+                        el.PersonId,
+                        FullName = el.person.SecondName + " " + el.person.FirstName + " " + el.person.Surname
+
+                    }).ToList();
+
+                    PupilsListBox.ItemsSource = pupilsListNew;
                     PupilsListBox.SelectedItem = PupilsListBox.Items[PupilsListBox.Items.Count - 1];
                 }
                 else
@@ -418,7 +517,14 @@ namespace Driving_School
         {
             if (DrivingSchoolsListBox.SelectedItem != null)
             {
-                var selectedPupil = (Pupils)PupilsListBox.SelectedItem;
+                Pupils selectedPupil = null;
+
+                if (PupilsListBox.SelectedItem != null)
+                {
+                    int plpId = (int)PupilsListBox.SelectedItem.GetType().GetProperty("PupilId").GetValue(PupilsListBox.SelectedItem, null);
+                    selectedPupil = db.Pupils.First(el => el.PupilId == plpId);
+                }
+
                 if (selectedPupil != null)
                 {
                     db.Pupils.Remove(db.Pupils.Where(el => el.PupilId == selectedPupil.PupilId).FirstOrDefault());
@@ -426,7 +532,16 @@ namespace Driving_School
                 }
 
                 saveMessage3.Content = "Успешно удалено!";
-                var pupilsList = db.Pupils.Where(el => el.SchoolId == ((DrivingSchools)DrivingSchoolsListBox.SelectedItem).DrivingSchoolId).ToList();
+
+                var pupilsList = db.Pupils.Where(el => el.SchoolId == DrivingSchoolId).Select(el => new
+                {
+                    el.PupilId,
+                    el.IsCashlessPayments,
+                    el.SchoolId,
+                    el.PersonId,
+                    FullName = el.person.SecondName + " " + el.person.FirstName + " " + el.person.Surname
+
+                }).ToList();
                 PupilsListBox.ItemsSource = pupilsList;
             }
             else
@@ -439,7 +554,13 @@ namespace Driving_School
         {
             if (PupilsListBox.SelectedItem != null)
             {
-                var selectedPupil = (Pupils)PupilsListBox.SelectedItem;
+                Pupils selectedPupil = null;
+
+                if (PupilsListBox.SelectedItem != null)
+                {
+                    int plpId = (int)PupilsListBox.SelectedItem.GetType().GetProperty("PupilId").GetValue(PupilsListBox.SelectedItem, null);
+                    selectedPupil = db.Pupils.First(el => el.PupilId == plpId);
+                }
 
                 var selectedPupilPerson = db.Person.Where(el => el.PersonId == selectedPupil.PersonId).FirstOrDefault();
 
@@ -451,13 +572,23 @@ namespace Driving_School
                     PupilBirthDate.SelectedDate = selectedPupilPerson.DateOfBirth;
                     PupilStatus.Text = selectedPupilPerson.SocialStatus;
                     PupilPhotoPath.Text = selectedPupilPerson.PathToPhoto;
+                    PupilStudyPlace.Text = selectedPupilPerson.PlaceOfStudy;
+                    PupilWorkPlace.Text = selectedPupilPerson.PlaceOfWork;
+                    PupilPayment.IsChecked = selectedPupil.IsCashlessPayments;
                 }
             }
         }
 
         private void WorkerSaveButton_Click(object sender, RoutedEventArgs e)
         {
-            var selectedWorker = (CoWorkers)WorkersListBox.SelectedItem;
+         
+            CoWorkers selectedWorker = null;
+
+            if (WorkersListBox.SelectedItem != null)
+            {
+                int Id = (int)WorkersListBox.SelectedItem.GetType().GetProperty("CoWorkerId").GetValue(WorkersListBox.SelectedItem, null);
+                selectedWorker = db.CoWorkers.First(el => el.CoWorkerId == Id);
+            }
 
             try
             {
@@ -492,7 +623,6 @@ namespace Driving_School
                         var selWorker = db.CoWorkers.Where(el => el.CoWorkerId == selectedWorker.CoWorkerId).FirstOrDefault();
 
                         selWorker.SchoolId = ((DrivingSchools)DrivingSchoolsListBox.SelectedItem).DrivingSchoolId;
-                        selWorker.PersonId = db.Person.Max(el => el.PersonId);
 
                         var selPerson = db.Person.Where(el => el.PersonId == selWorker.PersonId).FirstOrDefault();
 
@@ -508,7 +638,14 @@ namespace Driving_School
                 }
 
                 saveMessage4.Content = "Сохранено!";
-                var workersList = db.CoWorkers.Where(el => el.SchoolId == ((DrivingSchools)DrivingSchoolsListBox.SelectedItem).DrivingSchoolId).ToList();
+                var workersList = db.CoWorkers.Where(el => el.SchoolId == DrivingSchoolId).Select(el => new
+                {
+                    el.CoWorkerId,
+                    el.SchoolId,
+                    el.PersonId,
+                    FullName = el.person.SecondName + " " + el.person.FirstName + " " + el.person.Surname
+
+                }).ToList();
                 WorkersListBox.ItemsSource = workersList;
             }
             catch (Exception ex)
@@ -523,6 +660,8 @@ namespace Driving_School
             {
                 var selectedDrivingSchool = (DrivingSchools)DrivingSchoolsListBox.SelectedItem;
                 var workersList = db.CoWorkers.Where(el => el.SchoolId == selectedDrivingSchool.DrivingSchoolId).ToList();
+
+
                 if (DrivingSchoolsListBox.SelectedItem != null)
                 {
                     var newWorker = new CoWorkers();
@@ -535,7 +674,16 @@ namespace Driving_School
 
                     workersList.Add(newWorker);
 
-                    WorkersListBox.ItemsSource = workersList;
+                    var workersListNew = workersList.Select(el => new
+                    {
+                        el.CoWorkerId,
+                        el.SchoolId,
+                        el.PersonId,
+                        FullName = el.person.SecondName + " " + el.person.FirstName + " " + el.person.Surname
+
+                    }).ToList();
+
+                    WorkersListBox.ItemsSource = workersListNew;
                     WorkersListBox.SelectedItem = WorkersListBox.Items[WorkersListBox.Items.Count - 1];
                 }
                 else
@@ -553,7 +701,14 @@ namespace Driving_School
         {
             if (DrivingSchoolsListBox.SelectedItem != null)
             {
-                var selectedWorker = (CoWorkers)WorkersListBox.SelectedItem;
+                CoWorkers selectedWorker = null;
+
+                if (WorkersListBox.SelectedItem != null)
+                {
+                    int Id = (int)WorkersListBox.SelectedItem.GetType().GetProperty("CoWorkerId").GetValue(WorkersListBox.SelectedItem, null);
+                    selectedWorker = db.CoWorkers.First(el => el.CoWorkerId == Id);
+                }
+
                 if (selectedWorker != null)
                 {
                     db.CoWorkers.Remove(db.CoWorkers.Where(el => el.CoWorkerId == selectedWorker.CoWorkerId).FirstOrDefault());
@@ -561,7 +716,14 @@ namespace Driving_School
                 }
 
                 saveMessage4.Content = "Успешно удалено!";
-                var workersList = db.CoWorkers.Where(el => el.SchoolId == ((DrivingSchools)DrivingSchoolsListBox.SelectedItem).DrivingSchoolId).ToList();
+                var workersList = db.CoWorkers.Where(el => el.SchoolId == DrivingSchoolId).Select(el => new
+                {
+                    el.CoWorkerId,
+                    el.SchoolId,
+                    el.PersonId,
+                    FullName = el.person.SecondName + " " + el.person.FirstName + " " + el.person.Surname
+
+                }).ToList();
                 WorkersListBox.ItemsSource = workersList;
             }
             else
@@ -574,7 +736,13 @@ namespace Driving_School
         {
             if (WorkersListBox.SelectedItem != null)
             {
-                var selectedWorker = (CoWorkers)WorkersListBox.SelectedItem;
+                CoWorkers selectedWorker = null;
+
+                if (WorkersListBox.SelectedItem != null)
+                {
+                    int Id = (int)WorkersListBox.SelectedItem.GetType().GetProperty("CoWorkerId").GetValue(WorkersListBox.SelectedItem, null);
+                    selectedWorker = db.CoWorkers.First(el => el.CoWorkerId == Id);
+                }
 
                 var selectedWorkerPerson = db.Person.Where(el => el.PersonId == selectedWorker.PersonId).FirstOrDefault();
 
@@ -797,8 +965,8 @@ namespace Driving_School
             {
                 var selectedLesson = (DrivingLessons)LessonsListBox.SelectedItem;
 
-                LessonCarId.Text = selectedLesson.CarId.ToString();
-                LessonWorkerId.Text = selectedLesson.CoWorkerId.ToString();
+                LessonCarId.Text = selectedLesson.car.CarType + " " + selectedLesson.car.CarModel;
+                LessonWorkerId.Text = selectedLesson.coWorker.person.SecondName + " " + selectedLesson.coWorker.person.FirstName + " " + selectedLesson.coWorker.person.Surname;
                 LessonDate.SelectedDate = selectedLesson.SessionDate;
             }
         }
@@ -828,12 +996,12 @@ namespace Driving_School
             if (sortListCourses.Content.ToString() == "По убыванию")
             {
                 sortListCourses.Content = "По возрастанию";
-                CoursesListBox.ItemsSource = db.Courses.OrderByDescending(el => el.CourseName).ToList();
+                CoursesListBox.ItemsSource = db.Courses.Where(el => el.DrivingSchoolId == DrivingSchoolId).OrderByDescending(el => el.CourseName).ToList();
             }
             else
             {
                 sortListCourses.Content = "По убыванию";
-                CoursesListBox.ItemsSource = db.Courses.OrderBy(el => el.CourseName).ToList();
+                CoursesListBox.ItemsSource = db.Courses.Where(el => el.DrivingSchoolId == DrivingSchoolId).OrderBy(el => el.CourseName).ToList();
             }
         }
 
@@ -842,13 +1010,63 @@ namespace Driving_School
             if (sortListPupils.Content.ToString() == "По убыванию")
             {
                 sortListPupils.Content = "По возрастанию";
-                PupilsListBox.ItemsSource = db.Pupils.OrderByDescending(el => el.person.Surname).ToList();
+                PupilsListBox.ItemsSource = db.Pupils.Where(el => el.SchoolId == DrivingSchoolId).OrderByDescending(el => el.person.Surname).ToList();
             }
             else
             {
                 sortListPupils.Content = "По убыванию";
-                PupilsListBox.ItemsSource = db.Pupils.OrderBy(el => el.person.Surname).ToList();
+                PupilsListBox.ItemsSource = db.Pupils.Where(el => el.SchoolId == DrivingSchoolId).OrderBy(el => el.person.Surname).ToList();
             }
         }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            QuerysWindow mw = new QuerysWindow();
+            mw.Show();
+        }
+
+        private void sortWorkerList_Click(object sender, RoutedEventArgs e)
+        {
+            if (sortWorkerList.Content.ToString() == "По убыванию")
+            {
+                sortWorkerList.Content = "По возрастанию";
+                WorkersListBox.ItemsSource = db.CoWorkers.Where(el => el.SchoolId == DrivingSchoolId).OrderByDescending(el => el.person.Surname).ToList();
+            }
+            else
+            {
+                sortWorkerList.Content = "По убыванию";
+                WorkersListBox.ItemsSource = db.CoWorkers.Where(el => el.SchoolId == DrivingSchoolId).OrderBy(el => el.person.Surname).ToList();
+            }
+        }
+
+        private void sortCarList_Click(object sender, RoutedEventArgs e)
+        {
+            if (sortCarList.Content.ToString() == "По убыванию")
+            {
+                sortCarList.Content = "По возрастанию";
+                CarsListBox.ItemsSource = db.Cars.Where(el => el.SchoolId == DrivingSchoolId).OrderByDescending(el => el.CarModel).ToList();
+            }
+            else
+            {
+                sortCarList.Content = "По убыванию";
+                CarsListBox.ItemsSource = db.Cars.Where(el => el.SchoolId == DrivingSchoolId).OrderBy(el => el.CarModel).ToList();
+            }
+        }
+
+        private void sortLessonList_Click(object sender, RoutedEventArgs e)
+        {
+            if (sortLessonList.Content.ToString() == "По убыванию")
+            {
+                sortLessonList.Content = "По возрастанию";
+                LessonsListBox.ItemsSource = db.DrivingLessons.Where(el => el.SchoolId == DrivingSchoolId).OrderByDescending(el => el.SessionDate).ToList();
+            }
+            else
+            {
+                sortLessonList.Content = "По убыванию";
+                LessonsListBox.ItemsSource = db.DrivingLessons.Where(el => el.SchoolId == DrivingSchoolId).OrderBy(el => el.SessionDate).ToList();
+            }
+        }
+
+     
     }
 }
