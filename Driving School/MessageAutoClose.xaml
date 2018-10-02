@@ -5,9 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Driving_School"
         mc:Ignorable="d"
-        Title="MessageAutoClose" Height="129.223" Width="359.122">
+        Title="MessageAutoClose" Height="159.628" Width="359.122">
     <Grid Margin="0,0,494,301">
-        <TextBox Name="Message" TextAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" Height="41" Margin="60,23,-290,-64" TextWrapping="Wrap" Text="" VerticalAlignment="Center" Width="230"/>
+        <TextBox Name="Message" TextAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" Height="41" Margin="60,23,-290,-64" TextWrapping="Wrap" Text="Идет автозаполнение БД...." VerticalAlignment="Center" Width="230"/>
+        <ProgressBar Name="progAutoFillDb" HorizontalAlignment="Left" Height="20" Margin="60,85,-260,-105" VerticalAlignment="Center" Width="230"/>
 
     </Grid>
 </Window>

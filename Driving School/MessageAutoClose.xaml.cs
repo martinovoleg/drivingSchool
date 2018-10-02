@@ -19,10 +19,9 @@ namespace Driving_School
     /// </summary>
     public partial class MessageAutoClose : Window
     {
-        public MessageAutoClose(string message)
+        public MessageAutoClose()
         {
             InitializeComponent();
-            Message.Text = message;
         }
     }
 }
