@@ -1,0 +1,13 @@
+﻿<Window x:Class="Driving_School.MessageAutoClose"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Driving_School"
+        mc:Ignorable="d"
+        Title="MessageAutoClose" Height="129.223" Width="359.122">
+    <Grid Margin="0,0,494,301">
+        <TextBox Name="Message" TextAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" Height="41" Margin="60,23,-290,-64" TextWrapping="Wrap" Text="" VerticalAlignment="Center" Width="230"/>
+
+    </Grid>
+</Window>

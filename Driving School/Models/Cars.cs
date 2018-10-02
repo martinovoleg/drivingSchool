@@ -14,11 +14,13 @@ namespace Driving_School.Models
         public int CarId { get; set; }
         public string CarType { get; set; }
         public string CarModel { get; set; }
+        public int SchoolId { get; set; }
+
         [Column(TypeName = "Date")]
         public DateTime CarProductionYear { get; set; }
         [Column(TypeName = "Date")]
         public DateTime YearOfAdmissionToDrivingSchool { get; set; }
-        public int SchoolId { get; set; }
+        
 
         public virtual ICollection<DrivingLessons> drivingLessons { get; set; }
 
