@@ -308,8 +308,13 @@ namespace Driving_School
                 {
                     var newCourse = new Courses
                     {
-                        DrivingSchoolId = ((DrivingSchools)DrivingSchoolsListBox.SelectedItem).DrivingSchoolId,
-                        CourseName = "Новый курс"
+                        DrivingSchoolId = DrivingSchoolId,
+                        CourseName = "Новый курс",
+                        DateOfBeginningCourse = DateTime.Now.Date,
+                        TrainingPeriod = 0,
+                        CostOfEducation = 0,
+                        CostOfGasolineAndFuel = 0,
+                        CourseDuration = 0
                     };
 
                     db.Courses.Add(newCourse);
@@ -349,6 +354,8 @@ namespace Driving_School
 
         private void CoursesListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            saveMessage2.Content = null;
+
             if (CoursesListBox.SelectedItem != null)
             {
                 var selectedCourse = (Courses)CoursesListBox.SelectedItem;
@@ -383,12 +390,19 @@ namespace Driving_School
         {
             Pupils selectedPupil = null;
 
-            if (PupilsListBox.SelectedItem != null)
+            try
             {
-                int plpId = (int)PupilsListBox.SelectedItem.GetType().GetProperty("PupilId").GetValue(PupilsListBox.SelectedItem, null);
-                selectedPupil = db.Pupils.First(el => el.PupilId == plpId);
+                if (PupilsListBox.SelectedItem != null)
+                {
+                    int plpId = (int)PupilsListBox.SelectedItem.GetType().GetProperty("PupilId").GetValue(PupilsListBox.SelectedItem, null);
+                    selectedPupil = db.Pupils.First(el => el.PupilId == plpId);
+                }
             }
-
+            catch
+            {
+                selectedPupil = new Pupils();
+            }
+          
             try
             {
                 if (selectedPupil != null)
@@ -467,11 +481,24 @@ namespace Driving_School
             try
             {
                 var selectedDrivingSchool = (DrivingSchools)DrivingSchoolsListBox.SelectedItem;
+                if(selectedDrivingSchool == null)
+                {
+                    throw new Exception("Сначала выберите автошколу!");
+                }
                 var pupilList = db.Pupils.Where(el => el.SchoolId == selectedDrivingSchool.DrivingSchoolId).ToList();
 
                 if (DrivingSchoolsListBox.SelectedItem != null)
                 {
+                    var pers = new Person()
+                    {
+                        SecondName = "Новый"
+                    };
+
                     var newPupil = new Pupils();
+                    newPupil.PupilId = 0;
+                    newPupil.PersonId = 0;
+                    newPupil.person = pers;
+                    newPupil.IsCashlessPayments = false;
                     PupilSecondName.Text = "Иванов";
                     PupilFirstName.Text = "";
                     PupilSurName.Text = "";
@@ -504,7 +531,7 @@ namespace Driving_School
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString());
+                MessageBox.Show(ex.Message.ToString());
             }
         }
 
@@ -514,11 +541,16 @@ namespace Driving_School
             {
                 Pupils selectedPupil = null;
 
-                if (PupilsListBox.SelectedItem != null)
+                try
                 {
-                    int plpId = (int)PupilsListBox.SelectedItem.GetType().GetProperty("PupilId").GetValue(PupilsListBox.SelectedItem, null);
-                    selectedPupil = db.Pupils.First(el => el.PupilId == plpId);
+                    if (PupilsListBox.SelectedItem != null)
+                    {
+                        int plpId = (int)PupilsListBox.SelectedItem.GetType().GetProperty("PupilId").GetValue(PupilsListBox.SelectedItem, null);
+                        selectedPupil = db.Pupils.First(el => el.PupilId == plpId);
+                    }
                 }
+                catch { }
+               
 
                 if (selectedPupil != null)
                 {
@@ -547,18 +579,28 @@ namespace Driving_School
 
         private void PupilListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            saveMessage3.Content = null;
+
             if (PupilsListBox.SelectedItem != null)
             {
                 Pupils selectedPupil = null;
+                Person selectedPupilPerson = null;
 
-                if (PupilsListBox.SelectedItem != null)
+                try
                 {
-                    int plpId = (int)PupilsListBox.SelectedItem.GetType().GetProperty("PupilId").GetValue(PupilsListBox.SelectedItem, null);
-                    selectedPupil = db.Pupils.First(el => el.PupilId == plpId);
+                    if (PupilsListBox.SelectedItem != null)
+                    {
+                        int plpId = (int)PupilsListBox.SelectedItem.GetType().GetProperty("PupilId").GetValue(PupilsListBox.SelectedItem, null);
+                        selectedPupil = db.Pupils.First(el => el.PupilId == plpId);
+                    }
+                    selectedPupilPerson = db.Person.Where(el => el.PersonId == selectedPupil.PersonId).FirstOrDefault();
                 }
-
-                var selectedPupilPerson = db.Person.Where(el => el.PersonId == selectedPupil.PersonId).FirstOrDefault();
-
+                catch
+                {
+                    selectedPupilPerson = new Person();
+                    selectedPupil = new Pupils();
+                }
+                
                 if (selectedPupilPerson != null)
                 {
                     PupilFirstName.Text = selectedPupilPerson.FirstName;
