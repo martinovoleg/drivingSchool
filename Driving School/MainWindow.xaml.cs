@@ -367,18 +367,13 @@ namespace Driving_School
                 GSMCost.Text = selectedCourse.CostOfGasolineAndFuel.ToString();
 
                 try
-                {
-                    var selectedCourseCategory = db.Course_CategotryOfDriving.Where(el => el.CourseId == selectedCourse.CourseId).First();
-                    var category = categoryOfDrivingList.FirstOrDefault(el => el.CategoryOfDrivingId == selectedCourseCategory.CategoryOfDrivingId);
-
-                    if (category != null)
-                    {
-                        CategoryOfDriving.SelectedItem = category;
-                    }
+                { 
+                        CategoryOfDriving.SelectedItem = selectedCourse.course_CategotryOfDrivings.First();
+                    
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.ToString());
+                    CategoryOfDriving.SelectedItem = categoryOfDrivingList.First();
                 }
 
             }
