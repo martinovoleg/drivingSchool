@@ -1007,15 +1007,25 @@ namespace Driving_School
 
         private void sortListPupils_Click(object sender, RoutedEventArgs e)
         {
+            var pupilsList = db.Pupils.Where(el => el.SchoolId == DrivingSchoolId).Select(el => new
+            {
+                el.PupilId,
+                el.IsCashlessPayments,
+                el.SchoolId,
+                el.PersonId,
+                FullName = el.person.SecondName + " " + el.person.FirstName + " " + el.person.Surname
+
+            }).ToList();
+
             if (sortListPupils.Content.ToString() == "По убыванию")
             {
                 sortListPupils.Content = "По возрастанию";
-                PupilsListBox.ItemsSource = db.Pupils.Where(el => el.SchoolId == DrivingSchoolId).OrderByDescending(el => el.person.Surname).ToList();
+                PupilsListBox.ItemsSource = pupilsList.OrderByDescending(el => el.FullName);
             }
             else
             {
                 sortListPupils.Content = "По убыванию";
-                PupilsListBox.ItemsSource = db.Pupils.Where(el => el.SchoolId == DrivingSchoolId).OrderBy(el => el.person.Surname).ToList();
+                PupilsListBox.ItemsSource = pupilsList.OrderBy(el => el.FullName).ToList();
             }
         }
 
@@ -1027,15 +1037,24 @@ namespace Driving_School
 
         private void sortWorkerList_Click(object sender, RoutedEventArgs e)
         {
+            var workersList = db.CoWorkers.Where(el => el.SchoolId == DrivingSchoolId).Select(el => new
+            {
+                el.CoWorkerId,
+                el.SchoolId,
+                el.PersonId,
+                FullName = el.person.SecondName + " " + el.person.FirstName + " " + el.person.Surname
+
+            }).ToList();
+
             if (sortWorkerList.Content.ToString() == "По убыванию")
             {
                 sortWorkerList.Content = "По возрастанию";
-                WorkersListBox.ItemsSource = db.CoWorkers.Where(el => el.SchoolId == DrivingSchoolId).OrderByDescending(el => el.person.Surname).ToList();
+                WorkersListBox.ItemsSource = workersList.OrderByDescending(el => el.FullName).ToList();
             }
             else
             {
                 sortWorkerList.Content = "По убыванию";
-                WorkersListBox.ItemsSource = db.CoWorkers.Where(el => el.SchoolId == DrivingSchoolId).OrderBy(el => el.person.Surname).ToList();
+                WorkersListBox.ItemsSource = workersList.OrderBy(el => el.FullName).ToList();
             }
         }
 
