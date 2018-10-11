@@ -76,7 +76,6 @@ namespace Driving_School
             SetBlackOutDates();
 
             // получаем все автошколы
-
             var drivingShoolsList = db.DrivingSchools.ToList();
             var typeOfPropertyList = db.TypeOfProperty.Select(el => el.TypeOfPropertyName).ToList();
             var categoriesOfDriving = db.CategoriesOfDriving.ToList();
@@ -84,6 +83,8 @@ namespace Driving_School
 
             DrivingSchoolsListBox.ItemsSource = drivingShoolsList;
             DrivingSchoolsListBox.DisplayMemberPath = "DrivingSchoolName";
+
+          
 
             // инициализация выпадающего списка с типами собственности
             TypeOfProperty.ItemsSource = typeOfPropertyList;
@@ -142,9 +143,17 @@ namespace Driving_School
                     FullName = el.person.SecondName + " " + el.person.FirstName + " " + el.person.Surname
 
                 }).ToList();
-                var carsList = db.Cars.Where(el => el.SchoolId == selectedDrivingSchool.DrivingSchoolId).ToList();
-                var lessonsList = db.DrivingLessons.Where(el => el.SchoolId == selectedDrivingSchool.DrivingSchoolId).ToList();
 
+               
+
+                var carsList = db.Cars.Where(el => el.SchoolId == selectedDrivingSchool.DrivingSchoolId).ToList();
+                var lessonsList = db.DrivingLessons.Where(el => el.SchoolId == DrivingSchoolId).ToList();
+
+                LessonWorkerId.ItemsSource = workersList;
+                LessonCarId.ItemsSource = carsList;
+                LessonCarId.DisplayMemberPath = "CarModel";
+
+                LessonWorkerId.DisplayMemberPath = "FullName";
                 CoursesListBox.ItemsSource = courseList;
                 CoursesListBox.DisplayMemberPath = "CourseName";
                 PupilsListBox.ItemsSource = pupilsList;
@@ -906,19 +915,43 @@ namespace Driving_School
         private void LessonSaveButton_Click(object sender, RoutedEventArgs e)
         {
             var selectedLesson = (DrivingLessons)LessonsListBox.SelectedItem;
+            CoWorkers selectedWorker = null;
+            Cars selectedCar = null;
+            int Id;
+            int carId;
 
             try
             {
+                if (LessonWorkerId.SelectedItem != null)
+                {
+                    Id = (int)LessonWorkerId.SelectedItem.GetType().GetProperty("CoWorkerId").GetValue(LessonWorkerId.SelectedItem, null);
+                    selectedWorker = db.CoWorkers.First(el => el.CoWorkerId == Id);
+                }
+                else
+                {
+                    throw new Exception("Выберите проводившего сотрудника!");
+                }
+
+                if (LessonCarId.SelectedItem != null)
+                {
+                    carId = (int)LessonCarId.SelectedItem.GetType().GetProperty("CarId").GetValue(LessonCarId.SelectedItem, null);
+                    selectedCar = db.Cars.First(el => el.CarId == carId);
+                }
+                else
+                {
+                    throw new Exception("Выберите машину!");
+                }
+
                 if (selectedLesson != null)
                 {
                     if (selectedLesson.DrivingLessonsId == 0)
                     {
                         var newLesson = new DrivingLessons
                         {
-                            CarId = Convert.ToInt32(LessonCarId.Text),
-                            CoWorkerId = Convert.ToInt32(LessonWorkerId.Text),
+                            CarId = carId,
+                            CoWorkerId = Id,
                             SessionDate = (DateTime)LessonDate.SelectedDate,
-                            SchoolId = ((DrivingSchools)DrivingSchoolsListBox.SelectedItem).DrivingSchoolId
+                            SchoolId = DrivingSchoolId
                         };
 
                         db.DrivingLessons.Add(newLesson);
@@ -927,14 +960,12 @@ namespace Driving_School
                     else
                     {
                         var selLesson = db.DrivingLessons.Where(el => el.DrivingLessonsId == selectedLesson.DrivingLessonsId).FirstOrDefault();
-
-                        selLesson.SchoolId = ((DrivingSchools)DrivingSchoolsListBox.SelectedItem).DrivingSchoolId;
-                        selLesson.DrivingLessonsId = db.DrivingLessons.Max(el => el.DrivingLessonsId);
-
+                        selLesson.SchoolId = DrivingSchoolId;
                         selLesson.CarId = Convert.ToInt32(LessonCarId.Text);
-                        selLesson.CoWorkerId = Convert.ToInt32(LessonWorkerId.Text);
+                        selLesson.CoWorkerId = Id;
                         selLesson.SessionDate = (DateTime)LessonDate.SelectedDate;
 
+                        db.DrivingLessons.Add(selLesson);
                         db.SaveChanges();
                     }
                 }
@@ -955,6 +986,7 @@ namespace Driving_School
             {
                 var selectedDrivingSchool = (DrivingSchools)DrivingSchoolsListBox.SelectedItem;
                 var lessonsList = db.DrivingLessons.Where(el => el.SchoolId == selectedDrivingSchool.DrivingSchoolId).ToList();
+
                 if (DrivingSchoolsListBox.SelectedItem != null)
                 {
                     var newLesson = new DrivingLessons();
@@ -980,10 +1012,16 @@ namespace Driving_School
             if (DrivingSchoolsListBox.SelectedItem != null)
             {
                 var selectedLesson = (DrivingLessons)LessonsListBox.SelectedItem;
+
                 if (selectedLesson != null)
                 {
                     db.DrivingLessons.Remove(db.DrivingLessons.Where(el => el.DrivingLessonsId == selectedLesson.DrivingLessonsId).FirstOrDefault());
                     db.SaveChanges();
+                }
+                else
+                {
+                    MessageBox.Show("Сначала выберите урок!");
+                    return;
                 }
 
                 saveMessage6.Content = "Успешно удалено!";
@@ -998,12 +1036,23 @@ namespace Driving_School
 
         private void LessonsListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            saveMessage6.Content = null;
+
+            var workersList = db.CoWorkers.Where(el => el.SchoolId == DrivingSchoolId).Select(el => new
+            {
+                el.CoWorkerId,
+                el.SchoolId,
+                el.PersonId,
+                FullName = el.person.SecondName + " " + el.person.FirstName + " " + el.person.Surname
+
+            }).ToList();
+
             if (LessonsListBox.SelectedItem != null)
             {
                 var selectedLesson = (DrivingLessons)LessonsListBox.SelectedItem;
 
-                LessonCarId.Text = selectedLesson.car.CarType + " " + selectedLesson.car.CarModel;
-                LessonWorkerId.Text = selectedLesson.coWorker.person.SecondName + " " + selectedLesson.coWorker.person.FirstName + " " + selectedLesson.coWorker.person.Surname;
+                LessonCarId.Text = selectedLesson.car.CarModel;
+                LessonWorkerId.SelectedItem = workersList.First(el => el.CoWorkerId == selectedLesson.CoWorkerId);
                 LessonDate.SelectedDate = selectedLesson.SessionDate;
             }
         }

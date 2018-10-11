@@ -338,12 +338,14 @@ namespace Driving_School
             {
                 var drIndex = Convert.ToInt32(rnd.Next(0, drList.Count() - 1));
                 var carIndex = Convert.ToInt32(rnd.Next(0, cars.Count() - 1));
-                var cowIndex = Convert.ToInt32(rnd.Next(0, coWorkers.Count() - 1));
+                int SchoolId = drList[drIndex].DrivingSchoolId;
+                var cowIndex = Convert.ToInt32(rnd.Next(0, coWorkers.Where(el=>el.SchoolId == SchoolId).Count() - 1));
+                int cowId = coWorkers.Where(el => el.SchoolId == SchoolId).ToList()[cowIndex].CoWorkerId;
 
                 var les = new DrivingLessons
                 {
-                    SchoolId = drList[drIndex].DrivingSchoolId,
-                    CoWorkerId = coWorkers[cowIndex].CoWorkerId,
+                    SchoolId = SchoolId,
+                    CoWorkerId = cowId,
                     CarId = cars[carIndex].CarId,
                     SessionDate = GenRandomDate(new DateTime(DateTime.Now.Year, 10, 1), new DateTime(DateTime.Now.Year + 1, 12, 31)),
                 };

@@ -128,7 +128,7 @@
                             <TextBox Text="{Binding CourseName}"  Name="CourseName" Height="25" Grid.Column="1" Grid.Row="1" />
                             <TextBox Name="CourseDuration" Height="25" Grid.Column="1" Grid.Row="2" />
                             <DatePicker Name="StartDate" Grid.Column="1" Grid.Row="3" Height="25">
-                              
+
                             </DatePicker>
                             <TextBox Name="DrivingDuration" Height="25" Grid.Column="1" Grid.Row="4" />
                             <TextBox Name="CourseCost" Height="25" Grid.Column="1" Grid.Row="5" />
@@ -348,13 +348,13 @@
                             <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Left" Height="47" Margin="293,-6,0,0" VerticalAlignment="Top" Width="86" RenderTransformOrigin="0.582,0.539">
                                 <Button Content="сохранить" Click="LessonSaveButton_Click" Padding="3" Margin="10" />
                             </StackPanel>
-                            <TextBox  Name="LessonWorkerId" Height="25" Grid.Column="1" Grid.Row="1" />
-                            <TextBox  Name="LessonCarId" Height="25" Grid.Column="1" Grid.Row="2" />
 
                             <DatePicker Name="LessonDate" Height="25" Grid.Column="1" Grid.Row="3" />
 
                             <Label Name="saveMessage6" Content="" Grid.Column="1" HorizontalAlignment="Left" Padding="3" Margin="157,6,0,0" VerticalAlignment="Top" Width="136" Height="25" />
                             <Label FontSize="16" Grid.ColumnSpan="2" Content="Информация о занятии" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" />
+                            <ComboBox Name="LessonWorkerId" Height="25" Grid.Column="1" HorizontalAlignment="Left" Margin="10,48,0,0" Grid.Row="1" VerticalAlignment="Top" Width="361"/>
+                            <ComboBox x:Name="LessonCarId" Height="26" Grid.Column="1" HorizontalAlignment="Left" Margin="10,41,0,0" Grid.Row="2" VerticalAlignment="Top" Width="361"/>
                         </Grid>
                     </ScrollViewer>
                 </Grid>
