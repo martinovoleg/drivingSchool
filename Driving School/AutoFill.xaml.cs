@@ -64,8 +64,44 @@ namespace Driving_School
             {
                 random = new Random();
             }
-            int daysDiff = (to - from).Days;
-            return from.AddDays(random.Next(daysDiff));
+            
+            int year = (random.Next(from.Year, to.Year));
+            int day;
+            int month;
+
+            if (year == from.Year)
+            {
+                if(from.Day > 28)
+                {
+                    day = (random.Next(from.Day, 31));
+                }
+                else
+                {
+                    day = (random.Next(from.Day, 28));
+                }
+               
+                month = (random.Next(from.Month, 12));
+            }
+            else if(year == to.Year)
+            {
+                if (to.Day > 28)
+                {
+                    day = (random.Next(to.Day, 31));
+                }
+                else
+                {
+                    day = (random.Next(to.Day, 28));
+                }
+                month = (random.Next(to.Month, 12));
+            }
+            else
+            {
+                day = (random.Next(1, 28));
+                month = (random.Next(1, 12));
+            }
+
+
+            return new DateTime(year,month,day);
         }
 
         private void clearDB()
@@ -197,14 +233,15 @@ namespace Driving_School
                 var carModelIndex = Convert.ToInt32(rnd.Next(0, carNamesCount));
                 var carTypeIndex = Convert.ToInt32(rnd.Next(0, carTypesCount));
                 var carProductionYear = GenRandomDate(new DateTime(1990, 1, 1), new DateTime(DateTime.Now.Year - 1, 1, 1));
+                var YearOfAdmissionToDrivingSchool = GenRandomDate(carProductionYear, new DateTime(DateTime.Now.Year - 1, 1, 1));
 
                 var car = new Cars
                 {
                     SchoolId = drList[drIndex].DrivingSchoolId,
                     CarModel = carNames[carModelIndex],
                     CarType = carTypes[carTypeIndex],
-                    CarProductionYear = carProductionYear,
-                    YearOfAdmissionToDrivingSchool = GenRandomDate(carProductionYear, new DateTime(DateTime.Now.Year - 1, 1, 1))
+                    CarProductionYear =carProductionYear,
+                    YearOfAdmissionToDrivingSchool = YearOfAdmissionToDrivingSchool
                 };
 
                 resultListCars.Add(car);
@@ -240,13 +277,15 @@ namespace Driving_School
                 var secIndex = Convert.ToInt32(rnd.Next(0, personSecondNames.Count() - 1));
                 var nameIndex = Convert.ToInt32(rnd.Next(0, personNames.Count() - 1));
                 var surIndex = Convert.ToInt32(rnd.Next(0, personSurnames.Count() - 1));
+                var DateOfBirth = GenRandomDate(new DateTime(DateTime.Now.Year - 40, 12, 31), new DateTime(DateTime.Now.Year - 16, 12, 31));
+
 
                 var pers = new Person
                 {
                     Surname = personSecondNames[secIndex],
                     FirstName = personNames[nameIndex],
                     SecondName = personSurnames[surIndex],
-                    DateOfBirth = GenRandomDate(new DateTime(DateTime.Now.Year - 40, 12, 31), new DateTime(DateTime.Now.Year - 16, 12, 31)),
+                    DateOfBirth = DateOfBirth,
                     SocialStatus = "Холостой",
                     PlaceOfStudy = "Высшее"
                 };
@@ -260,7 +299,7 @@ namespace Driving_School
 
             var resultListCourses = new List<Courses>();
 
-            for (int i = 0; i < 1000; i++)
+            for (int i = 0; i < 900; i++)
             {
                 var drIndex = Convert.ToInt32(rnd.Next(0, drList.Count() - 1));
 
@@ -268,12 +307,13 @@ namespace Driving_School
                 var nameIndex = Convert.ToInt32(rnd.Next(0, personNames.Count() - 1));
                 var surIndex = Convert.ToInt32(rnd.Next(0, personSurnames.Count() - 1));
                 var courseDuration = Convert.ToInt32(rnd.Next(10, 100));
+                var date = GenRandomDate(new DateTime(DateTime.Now.Year - 5, 1, 1), new DateTime(DateTime.Now.Year + 1, 12, 31));
 
                 var curs = new Courses
                 {
                     DrivingSchoolId = drList[drIndex].DrivingSchoolId,
                     CourseName = "Курс № " + (i + 1).ToString(),
-                    DateOfBeginningCourse = GenRandomDate(new DateTime(1990, 1, 1), new DateTime(DateTime.Now.Year + 1, 12, 31)),
+                    DateOfBeginningCourse = date,
                     CourseDuration = courseDuration,
                     CostOfEducation = courseDuration * 10,
                     CostOfGasolineAndFuel = courseDuration * 10 + 2000,
@@ -285,6 +325,37 @@ namespace Driving_School
             }
 
             db.Courses.AddRange(resultListCourses);
+            db.SaveChanges();
+
+
+            var resultListCourses2 = new List<Courses>();
+
+            for (int i = 0; i < 100; i++)
+            {
+                var drIndex = Convert.ToInt32(rnd.Next(0, drList.Count() - 1));
+
+                var secIndex = Convert.ToInt32(rnd.Next(0, personSurnames.Count() - 1));
+                var nameIndex = Convert.ToInt32(rnd.Next(0, personNames.Count() - 1));
+                var surIndex = Convert.ToInt32(rnd.Next(0, personSurnames.Count() - 1));
+                var courseDuration = Convert.ToInt32(rnd.Next(10, 100));
+                var date = new DateTime(2018, 1, 1);
+
+                var curs = new Courses
+                {
+                    DrivingSchoolId = drList[drIndex].DrivingSchoolId,
+                    CourseName = "Курс № " + (i + 1).ToString(),
+                    DateOfBeginningCourse = date,
+                    CourseDuration = courseDuration,
+                    CostOfEducation = courseDuration * 10,
+                    CostOfGasolineAndFuel = courseDuration * 10 + 2000,
+                    TrainingPeriod = courseDuration + Convert.ToInt32(rnd.Next(10, 100))
+                };
+
+                resultListCourses2.Add(curs);
+                //  mw.progAutoFillDb.Value += 0.0045248868778281;
+            }
+
+            db.Courses.AddRange(resultListCourses2);
             db.SaveChanges();
 
             var persons = db.Person.ToList();
@@ -341,13 +412,14 @@ namespace Driving_School
                 int SchoolId = drList[drIndex].DrivingSchoolId;
                 var cowIndex = Convert.ToInt32(rnd.Next(0, coWorkers.Where(el=>el.SchoolId == SchoolId).Count() - 1));
                 int cowId = coWorkers.Where(el => el.SchoolId == SchoolId).ToList()[cowIndex].CoWorkerId;
+                var SessionDate = GenRandomDate(new DateTime(DateTime.Now.Year, 10, 1), new DateTime(DateTime.Now.Year + 1, 12, 31));
 
                 var les = new DrivingLessons
                 {
                     SchoolId = SchoolId,
                     CoWorkerId = cowId,
                     CarId = cars[carIndex].CarId,
-                    SessionDate = GenRandomDate(new DateTime(DateTime.Now.Year, 10, 1), new DateTime(DateTime.Now.Year + 1, 12, 31)),
+                    SessionDate = SessionDate,
                 };
 
                 resultListDrivingLessons.Add(les);

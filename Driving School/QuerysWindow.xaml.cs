@@ -105,7 +105,7 @@ namespace Driving_School
                           join cat in db.CategoriesOfDriving on category.CategoryOfDrivingId equals cat.CategoryOfDrivingId
                           join cow in db.CoWorkers on category.CoWorkerId equals cow.CoWorkerId
                           join pers in db.Person on cow.PersonId equals pers.PersonId
-                          where course.DateOfBeginningCourse >= Convert.ToDateTime("01.01.2017") && course.DateOfBeginningCourse <= Convert.ToDateTime("01.01.2018")
+                          where course.DateOfBeginningCourse >= Convert.ToDateTime("01.01.1990") && course.DateOfBeginningCourse <= Convert.ToDateTime("01.01.2020")
 
                           select new
                           {
